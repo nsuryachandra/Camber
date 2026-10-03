@@ -110,7 +110,7 @@ export default function Login() {
         driving_license_number: regLicense.trim().toUpperCase(),
         address: regAddress.trim() || undefined,
       });
-      toast.success(`Welcome to FleetPro, ${user.name}! Your account is ready.`);
+      toast.success(`Welcome to CAMBER, ${user.name}! Your account is ready.`);
       navigate('/');
     } catch (err) {
       const errMsg = err.response?.data?.error || 'Registration failed. Please check your information.';
@@ -127,11 +127,19 @@ export default function Login() {
       <div className="login-card animate-scale-up" style={{ maxWidth: activeTab === 'customer' && customerMode === 'signup' ? 520 : 440 }}>
         {/* Brand Header */}
         <div className="login-brand">
-          <div className="login-brand-icon">
-            <Zap size={24} />
-          </div>
-          <h1 className="login-brand-name">FleetPro</h1>
-          <p className="login-sub">Modern Two-Sided Fleet &amp; Mobility Hub</p>
+          <img
+            src="/Camber.png"
+            alt="CAMBER"
+            style={{
+              height: 54,
+              width: 'auto',
+              objectFit: 'contain',
+              margin: '0 auto 10px',
+              display: 'block',
+            }}
+          />
+          <h1 className="login-brand-name">CAMBER</h1>
+          <p className="login-sub">Built to keep operations in line.</p>
         </div>
 
         {/* Portal Selection Tabs (21st.dev segmented pill) */}
@@ -317,7 +325,7 @@ export default function Login() {
                   id="email"
                   type="email"
                   className="form-input"
-                  placeholder={activeTab === 'staff' ? 'admin@fleetpro.in' : 'your.email@gmail.com'}
+                  placeholder={activeTab === 'staff' ? 'admin@camber.in' : 'your.email@gmail.com'}
                   value={email}
                   autoComplete="username"
                   onChange={(e) => setEmail(e.target.value)}
@@ -357,32 +365,6 @@ export default function Login() {
           </form>
         )}
 
-        {/* Staff Quick Demo Credentials Box */}
-        {activeTab === 'staff' && (
-          <div className="login-demo-box">
-            <div className="login-demo-label">1-Click Staff Demo Credentials</div>
-            <div className="login-demo-actions">
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm"
-                onClick={() => fillStaffDemo('admin@fleetpro.in', 'Admin@123')}
-                style={{ flex: 1 }}
-              >
-                <ShieldCheck size={14} style={{ color: 'var(--primary)' }} />
-                <span>Admin Login</span>
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm"
-                onClick={() => fillStaffDemo('staff@fleetpro.in', 'Admin@123')}
-                style={{ flex: 1 }}
-              >
-                <User size={14} style={{ color: 'var(--emerald)' }} />
-                <span>Staff Login</span>
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Guest Browse Fleet Link */}
         <div style={{ marginTop: 20, textAlign: 'center', borderTop: '1px solid var(--border)', paddingTop: 14 }}>

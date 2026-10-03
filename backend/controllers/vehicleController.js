@@ -188,7 +188,7 @@ const checkAvailability = asyncHandler(async (req, res) => {
   const overlaps = await db.query(
     `SELECT COUNT(*) AS cnt FROM rentals
      WHERE vehicle_id = ?
-       AND status IN ('BOOKED','ACTIVE')
+       AND status IN ('PENDING','BOOKED','ACTIVE')
        AND pickup_date <= ?
        AND expected_return_date >= ?`,
     [vehicleId, ret, pickup]

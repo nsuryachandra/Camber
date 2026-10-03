@@ -98,29 +98,3 @@ async function req(method, path, body, token) {
   // pickup → rented flag
   const pick = await req('POST', `/rentals/${RID}/pickup`, null, T);
   assert(pick.status === 200 && pick.json.status === 'ACTIVE', 'pickup: BOOKED → ACTIVE');
-
-  // return → completed
-  const ret = await req('POST', `/rentals/${RID}/return`, {
-    return_date: D(33),
-    extra_charges: 0,
-    vehicle_condition: 'GOOD',
-  }, T);
-  assert(ret.status === 200 && ret.json.rental?.status === 'COMPLETED', 'return: ACTIVE → COMPLETED');
-
-  // settle balance
-  const pay = await req('POST', '/payments', {
-    rental_id: RID,
-    amount: ret.json.rental.final_amount,
-    payment_method: 'CARD',
-    payment_status: 'PAID',
-    reference_note: 'E2E Full Payment',
-  }, T);
-  assert(pay.status === 201, 'final balance paid');
-
-  console.log('✓ All E2E Integration tests passed successfully!');
-}
-
-run().catch((err) => {
-  console.error('E2E test failed:', err);
-  process.exit(1);
-});

@@ -27,57 +27,6 @@ import BookingModal from './BookingModal';
 import Modal from '../../components/Modal';
 import { getVehicleImage } from '../../utils/vehicleImages';
 
-/* ── Bespoke Technical Vector Vehicle Silhouette (Studio Blueprint Lineart) ── */
-function VehicleSilhouette({ type, fuel, color }) {
-  const isEv = fuel?.toUpperCase() === 'ELECTRIC';
-  const isSuv = (type || '').toLowerCase().includes('suv');
-  const isMpv = (type || '').toLowerCase().includes('muv') || (type || '').toLowerCase().includes('van');
-
-  if (isEv) {
-    return (
-      <svg viewBox="0 0 200 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="vehicle-studio-silhouette" style={{ color: color || '#059669' }}>
-        <path d="M16 46h16m134 0h18M32 46a12 12 0 0 1 24 0m86 0a12 12 0 0 1 24 0M10 44l14-11 26-9 34-11h42l36 11 26 9 6 11H10z" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.38" />
-        <circle cx="44" cy="46" r="7.5" stroke="currentColor" strokeWidth="2.2" opacity="0.5" fill="#ffffff" />
-        <circle cx="154" cy="46" r="7.5" stroke="currentColor" strokeWidth="2.2" opacity="0.5" fill="#ffffff" />
-        <path d="M72 18l-8 15h54l-10-15H72z" stroke="currentColor" strokeWidth="1.6" opacity="0.3" />
-        <path d="M174 39l6 3" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" />
-      </svg>
-    );
-  }
-
-  if (isSuv) {
-    return (
-      <svg viewBox="0 0 200 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="vehicle-studio-silhouette" style={{ color: color || '#2563eb' }}>
-        <path d="M14 46h16m138 0h16M30 46a13 13 0 0 1 26 0m88 0a13 13 0 0 1 26 0M8 42l10-10 18-15 36-5h62l26 12 28 8 4 10H8z" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.38" />
-        <circle cx="43" cy="46" r="8" stroke="currentColor" strokeWidth="2.2" opacity="0.5" fill="#ffffff" />
-        <circle cx="157" cy="46" r="8" stroke="currentColor" strokeWidth="2.2" opacity="0.5" fill="#ffffff" />
-        <path d="M62 19l-4 13h76l-8-13H62z" stroke="currentColor" strokeWidth="1.6" opacity="0.3" />
-        <path d="M50 12h70" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.25" />
-      </svg>
-    );
-  }
-
-  if (isMpv) {
-    return (
-      <svg viewBox="0 0 200 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="vehicle-studio-silhouette" style={{ color: color || '#0284c7' }}>
-        <path d="M14 46h16m138 0h16M30 46a12 12 0 0 1 24 0m90 0a12 12 0 0 1 24 0M8 43l12-14 26-14 42-2h60l24 16 16 4 4 10H8z" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.38" />
-        <circle cx="42" cy="46" r="7.5" stroke="currentColor" strokeWidth="2.2" opacity="0.5" fill="#ffffff" />
-        <circle cx="156" cy="46" r="7.5" stroke="currentColor" strokeWidth="2.2" opacity="0.5" fill="#ffffff" />
-        <path d="M52 18l-4 13h88l-6-13H52z" stroke="currentColor" strokeWidth="1.6" opacity="0.3" />
-      </svg>
-    );
-  }
-
-  // Sedan / Saloon / Luxury
-  return (
-    <svg viewBox="0 0 200 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="vehicle-studio-silhouette" style={{ color: color || '#4f46e5' }}>
-      <path d="M14 46h18m136 0h18M32 46a11 11 0 0 1 22 0m90 0a11 11 0 0 1 22 0M10 44l18-9 28-11 44-8h38l32 10 22 8 4 10H10z" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.38" />
-      <circle cx="43" cy="46" r="7" stroke="currentColor" strokeWidth="2.2" opacity="0.5" fill="#ffffff" />
-      <circle cx="155" cy="46" r="7" stroke="currentColor" strokeWidth="2.2" opacity="0.5" fill="#ffffff" />
-      <path d="M74 21l-8 12h56l-12-12H74z" stroke="currentColor" strokeWidth="1.6" opacity="0.3" />
-    </svg>
-  );
-}
 
 export default function ExploreFleet() {
   const navigate = useNavigate();

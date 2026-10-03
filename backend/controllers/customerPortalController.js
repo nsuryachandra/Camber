@@ -19,7 +19,10 @@ const publicMeta = asyncHandler(async (req, res) => {
 // GET /api/public/vehicles — Public fleet showroom with filtering
 const publicVehicles = asyncHandler(async (req, res) => {
   const { search, type, branch, fuel, transmission, maxRate } = req.query;
-  const where = ["v.status = 'AVAILABLE'"];
+  const where = [
+    "v.status = 'AVAILABLE'",
+    "NOT EXISTS (SELECT 1 FROM rentals r WHERE r.vehicle_id = v.vehicle_id AND r.status IN ('PENDING', 'BOOKED', 'ACTIVE'))",
+  ];
   const params = [];
 
   if (search) {
@@ -166,6 +169,9 @@ const bookVehicle = asyncHandler(async (req, res) => {
     // Set new customer online booking status to PENDING approval by Admin/Staff
     await conn.query("UPDATE rentals SET status = 'PENDING' WHERE rental_id = ?", [rentalId]);
 
+    // Ensure vehicle is immediately marked RENTED so it leaves the showroom pool
+    await conn.query("UPDATE vehicles SET status = 'RENTED' WHERE vehicle_id = ?", [body.vehicle_id]);
+
     const [rentalRows] = await conn.query(
       'SELECT rental_id, rental_days, final_amount, status FROM rentals WHERE rental_id = ?',
       [rentalId]
@@ -265,6 +271,10 @@ const cancelBooking = asyncHandler(async (req, res) => {
 
   try {
     await db.query('CALL cancel_rental(?)', [rentalId]);
+    await db.query(
+      "UPDATE vehicles SET status = 'AVAILABLE' WHERE vehicle_id = (SELECT vehicle_id FROM rentals WHERE rental_id = ?)",
+      [rentalId]
+    );
   } catch (err) {
     if (err.sqlState === '45000') {
       throw new ApiError(409, err.sqlMessage || 'Cancellation rejected by business rules.');
@@ -297,6 +307,7 @@ const getProfile = asyncHandler(async (req, res) => {
         role: userRows[0].role,
       },
       stats: {
+        completed_trips: 0,
         total_trips: 0,
         total_spent: 0,
         active_trips: 0,
@@ -314,17 +325,17 @@ const getProfile = asyncHandler(async (req, res) => {
   if (!rows[0]) throw new ApiError(404, 'Customer record not found.');
 
   const stats = await db.query(
-    `SELECT COUNT(*) AS total_trips,
+    `SELECT COALESCE(SUM(CASE WHEN r.status = 'COMPLETED' THEN 1 ELSE 0 END), 0) AS completed_trips,
+            COUNT(DISTINCT r.rental_id) AS total_trips,
             COALESCE((
               SELECT SUM(p.amount)
               FROM payments p
               INNER JOIN rentals r2 ON r2.rental_id = p.rental_id
               WHERE r2.customer_id = ? AND p.payment_status = 'PAID'
             ), 0) AS total_spent,
-            COALESCE(SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END), 0) AS completed_trips,
-            COALESCE(SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END), 0) AS active_trips,
-            COALESCE(SUM(CASE WHEN status IN ('BOOKED', 'PENDING') THEN 1 ELSE 0 END), 0) AS upcoming_trips
-     FROM rentals WHERE customer_id = ?`,
+            COALESCE(SUM(CASE WHEN r.status = 'ACTIVE' THEN 1 ELSE 0 END), 0) AS active_trips,
+            COALESCE(SUM(CASE WHEN r.status IN ('BOOKED', 'PENDING') THEN 1 ELSE 0 END), 0) AS upcoming_trips
+     FROM rentals r WHERE r.customer_id = ?`,
     [customerId, customerId]
   );
 

@@ -25,20 +25,14 @@ async function run() {
 
   for (const v of fullFleet) {
     await conn.query(
-      `INSERT INTO vehicles 
-        (vehicle_id, brand, model, vehicle_type_id, manufacturing_year,
-         fuel_type, transmission, seating_capacity, rental_rate,
-         registration_number, branch_id, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'AVAILABLE')
-       ON DUPLICATE KEY UPDATE
-         brand = VALUES(brand), model = VALUES(model), vehicle_type_id = VALUES(vehicle_type_id),
-         manufacturing_year = VALUES(manufacturing_year), fuel_type = VALUES(fuel_type),
-         transmission = VALUES(transmission), seating_capacity = VALUES(seating_capacity),
-         rental_rate = VALUES(rental_rate), registration_number = VALUES(registration_number),
-         branch_id = 1, status = 'AVAILABLE'`,
-      [v.id, v.brand, v.model, v.type_id, v.year, v.fuel, v.trans, v.seats, v.rate, v.reg]
+      `UPDATE vehicles 
+       SET brand = ?, model = ?, vehicle_type_id = ?, manufacturing_year = ?,
+           fuel_type = ?, transmission = ?, seating_capacity = ?, rental_rate = ?,
+           registration_number = ?, status = 'AVAILABLE'
+       WHERE vehicle_id = ?`,
+      [v.brand, v.model, v.type_id, v.year, v.fuel, v.trans, v.seats, v.rate, v.reg, v.id]
     );
-    console.log(`Configured active vehicle: ${v.brand} ${v.model} (#${v.id})`);
+    console.log(`Updated active: ${v.brand} ${v.model} (#${v.id})`);
   }
 
   const [activeRows] = await conn.query("SELECT vehicle_id, brand, model, vehicle_type_id, status FROM vehicles WHERE status = 'AVAILABLE'");

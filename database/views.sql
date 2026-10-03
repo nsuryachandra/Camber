@@ -8,7 +8,7 @@
 
 USE vehicle_rental_db;
 
--- 1. Vehicles that can be booked right now (INNER JOINs + status filter)
+-- 1. Vehicles that can be booked right now (INNER JOINs + status filter + no active/pending bookings)
 CREATE OR REPLACE VIEW available_vehicles AS
 SELECT v.vehicle_id,
        v.registration_number,
@@ -24,7 +24,12 @@ SELECT v.vehicle_id,
 FROM vehicles v
 INNER JOIN vehicle_types t ON t.vehicle_type_id = v.vehicle_type_id
 INNER JOIN branches b      ON b.branch_id       = v.branch_id
-WHERE v.status = 'AVAILABLE';
+WHERE v.status = 'AVAILABLE'
+  AND NOT EXISTS (
+    SELECT 1 FROM rentals r
+    WHERE r.vehicle_id = v.vehicle_id
+      AND r.status IN ('PENDING', 'BOOKED', 'ACTIVE')
+  );
 
 -- 2. Open rentals — anything not finished/cancelled (multiple INNER JOINs)
 CREATE OR REPLACE VIEW active_rentals AS
@@ -48,7 +53,7 @@ FROM rentals r
 INNER JOIN customers c ON c.customer_id = r.customer_id
 INNER JOIN vehicles v  ON v.vehicle_id  = r.vehicle_id
 INNER JOIN branches br ON br.branch_id  = r.branch_id
-WHERE r.status IN ('BOOKED', 'ACTIVE');
+WHERE r.status IN ('PENDING', 'BOOKED', 'ACTIVE');
 
 -- 3. Revenue per month (aggregate view — powers dashboard + reports)
 CREATE OR REPLACE VIEW monthly_revenue AS

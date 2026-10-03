@@ -94,6 +94,9 @@ const create = asyncHandler(async (req, res) => {
     if (data.notes && rentalId) {
       await conn.query('UPDATE rentals SET notes = ? WHERE rental_id = ?', [data.notes, rentalId]);
     }
+    if (rentalId) {
+      await conn.query("UPDATE vehicles SET status = 'RENTED' WHERE vehicle_id = ?", [data.vehicle_id]);
+    }
   } catch (err) {
     if (err.sqlState === '45000') {
       // Business rule from the procedure — readable message
@@ -117,6 +120,10 @@ const pickup = asyncHandler(async (req, res) => {
     throw new ApiError(409, 'Only booked rentals can be picked up.');
   }
   await db.query("UPDATE rentals SET status = 'ACTIVE' WHERE rental_id = ?", [id]);
+  await db.query(
+    "UPDATE vehicles SET status = 'RENTED' WHERE vehicle_id = (SELECT vehicle_id FROM rentals WHERE rental_id = ?)",
+    [id]
+  );
   res.json({ rental_id: id, status: 'ACTIVE' });
 });
 
@@ -152,6 +159,10 @@ const cancel = asyncHandler(async (req, res) => {
   const id = numericId(req.params.id, 'ID');
   try {
     await db.query('CALL cancel_rental(?)', [id]);
+    await db.query(
+      "UPDATE vehicles SET status = 'AVAILABLE' WHERE vehicle_id = (SELECT vehicle_id FROM rentals WHERE rental_id = ?)",
+      [id]
+    );
   } catch (err) {
     if (err.sqlState === '45000') {
       throw new ApiError(409, err.sqlMessage || 'Cancellation rejected by business rules.');
@@ -171,6 +182,7 @@ const approve = asyncHandler(async (req, res) => {
     throw new ApiError(409, `Only pending rentals can be approved (currently ${rows[0].status}).`);
   }
   await db.query("UPDATE rentals SET status = 'BOOKED' WHERE rental_id = ?", [id]);
+  await db.query("UPDATE vehicles SET status = 'RENTED' WHERE vehicle_id = ?", [rows[0].vehicle_id]);
   const updated = await db.query(`${LIST_SELECT} WHERE r.rental_id = ?`, [id]);
   res.json({ message: 'Booking agreement approved by staff.', rental: updated[0] });
 });

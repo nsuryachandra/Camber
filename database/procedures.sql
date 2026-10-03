@@ -80,7 +80,7 @@ BEGIN
   SELECT COUNT(*) INTO v_overlap
   FROM rentals
   WHERE vehicle_id = p_vehicle_id
-    AND status IN ('BOOKED', 'ACTIVE')
+    AND status IN ('PENDING', 'BOOKED', 'ACTIVE')
     AND pickup_date <= p_return
     AND expected_return_date >= p_pickup;
 
@@ -104,6 +104,9 @@ BEGIN
      'BOOKED', p_user_id);
 
   SET p_rental_id = LAST_INSERT_ID();
+
+  -- Authoritatively set vehicle to RENTED so it leaves the available showroom
+  UPDATE vehicles SET status = 'RENTED' WHERE vehicle_id = p_vehicle_id;
 
   COMMIT;
 END$$

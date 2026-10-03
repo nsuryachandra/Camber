@@ -4,7 +4,7 @@ const config = require('./config');
 const { pool } = require('./db/pool');
 
 const server = app.listen(config.port, () => {
-  console.log(`FleetPro API listening on http://localhost:${config.port}`);
+  console.log(`CAMBER Mobility API listening on http://localhost:${config.port}`);
   console.log(`Connected to MySQL database "${config.db.database}" @ ${config.db.host}:${config.db.port}`);
 });
 

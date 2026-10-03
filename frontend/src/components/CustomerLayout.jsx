@@ -30,7 +30,7 @@ export default function CustomerLayout() {
 
   const handleSignOut = () => {
     logout();
-    toast.info('You have signed out from FleetPro.');
+    toast.info('You have signed out from CAMBER.');
     navigate('/login');
   };
 
@@ -97,27 +97,21 @@ export default function CustomerLayout() {
         >
           {/* Logo */}
           <Link to="/fleet" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <div
+            <img
+              src="/Camber.png"
+              alt="CAMBER"
               style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.35)',
+                height: 38,
+                width: 'auto',
+                objectFit: 'contain',
               }}
-            >
-              <Zap size={18} />
-            </div>
+            />
             <div>
-              <div style={{ fontSize: 18, fontWeight: 750, color: 'var(--text-primary)', letterSpacing: '-0.03em', lineHeight: 1.1, fontFamily: 'var(--font-display)', textRendering: 'geometricPrecision' }}>
-                Fleet<span style={{ color: '#2563eb' }}>Pro</span>
+              <div style={{ fontSize: 18, fontWeight: 750, color: 'var(--text-primary)', letterSpacing: '0.02em', lineHeight: 1.1, fontFamily: 'var(--font-display)', textRendering: 'geometricPrecision' }}>
+                CAMBER
               </div>
-              <div style={{ fontSize: 9.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#2563eb' }}>
-                Customer Showroom
+              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.03em', color: 'var(--text-secondary)' }}>
+                Built to keep operations in line.
               </div>
             </div>
           </Link>
@@ -313,7 +307,7 @@ export default function CustomerLayout() {
             color: 'var(--text-muted)',
           }}
         >
-          <span>&copy; 2026 FleetPro Enterprise Mobility. All rights reserved.</span>
+          <span>&copy; 2026 CAMBER. Built to keep operations in line. All rights reserved.</span>
           <span>Powered by MySQL &amp; React</span>
         </div>
       </footer>
