@@ -315,11 +315,17 @@ const getProfile = asyncHandler(async (req, res) => {
 
   const stats = await db.query(
     `SELECT COUNT(*) AS total_trips,
-            COALESCE(SUM(CASE WHEN status = 'COMPLETED' THEN final_amount ELSE 0 END), 0) AS total_spent,
+            COALESCE((
+              SELECT SUM(p.amount)
+              FROM payments p
+              INNER JOIN rentals r2 ON r2.rental_id = p.rental_id
+              WHERE r2.customer_id = ? AND p.payment_status = 'PAID'
+            ), 0) AS total_spent,
+            COALESCE(SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END), 0) AS completed_trips,
             COALESCE(SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END), 0) AS active_trips,
-            COALESCE(SUM(CASE WHEN status = 'BOOKED' THEN 1 ELSE 0 END), 0) AS upcoming_trips
+            COALESCE(SUM(CASE WHEN status IN ('BOOKED', 'PENDING') THEN 1 ELSE 0 END), 0) AS upcoming_trips
      FROM rentals WHERE customer_id = ?`,
-    [customerId]
+    [customerId, customerId]
   );
 
   res.json({ customer: rows[0], stats: stats[0] });

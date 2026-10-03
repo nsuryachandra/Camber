@@ -158,3 +158,14 @@ const updateStatus = asyncHandler(async (req, res) => {
            WHERE vehicle_id = ? AND maintenance_id <> ? AND status IN ('SCHEDULED','IN_PROGRESS')`,
           [vehicle_id, id]);
         if (open[0].cnt === 0) {
+          await conn.query("UPDATE vehicles SET status = 'AVAILABLE' WHERE vehicle_id = ?", [vehicle_id]);
+        }
+      }
+    }
+  });
+
+  const rows = await db.query(`${LIST_SELECT} WHERE m.maintenance_id = ?`, [id]);
+  res.json({ maintenance: rows[0] });
+});
+
+module.exports = { list, summary, create, update, updateStatus };

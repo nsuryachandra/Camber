@@ -98,6 +98,9 @@ const create = asyncHandler(async (req, res) => {
     payment_status: { type: 'string', oneOf: PAYMENT_STATUSES, default: 'PAID' },
     reference_note: { type: 'string', max: 200 },
   });
+
+  let paymentId;
+  await db.withTransaction(async (conn) => {
     const [rentalRows] = await conn.query(
       'SELECT final_amount, status FROM rentals WHERE rental_id = ? FOR UPDATE', [data.rental_id]);
     if (!rentalRows[0]) throw new ApiError(404, 'Rental not found.');
@@ -158,3 +161,5 @@ const updateStatus = asyncHandler(async (req, res) => {
 
   res.json({ payment_id: id, status });
 });
+
+module.exports = { list, outstanding, getOne, create, updateStatus };

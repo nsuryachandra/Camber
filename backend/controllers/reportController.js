@@ -98,6 +98,19 @@ const fleet = asyncHandler(async (req, res) => {
      GROUP BY t.vehicle_type_id, t.type_name
      ORDER BY total DESC`);
 
+  const byBranch = await db.query(
+    `SELECT b.branch_name, b.city,
+            COUNT(v.vehicle_id) AS total,
+            COALESCE(SUM(v.status='AVAILABLE'),0) AS available,
+            COALESCE(SUM(v.status='RENTED'),0) AS rented,
+            COALESCE(SUM(v.status='MAINTENANCE'),0) AS maintenance
+     FROM branches b
+     LEFT JOIN vehicles v ON v.branch_id = b.branch_id
+     GROUP BY b.branch_id, b.branch_name, b.city`);
+
+  res.json({ by_status: byStatus, by_type: byType, by_branch: byBranch });
+});
+
 // GET /api/reports/rentals — counts by status, top customers, duration stats
 const rentals = asyncHandler(async (req, res) => {
   const byStatus = await db.query(
@@ -158,3 +171,17 @@ const revenue = asyncHandler(async (req, res) => {
      WHERE r.status = 'COMPLETED'
      GROUP BY b.branch_id, b.branch_name, b.city
      ORDER BY revenue DESC`);
+
+  const pending = await db.query(
+    `SELECT COALESCE(SUM(r.final_amount), 0) - COALESCE(SUM(p.paid), 0) AS pending_revenue
+     FROM rentals r
+     LEFT JOIN (
+       SELECT rental_id, SUM(amount) AS paid FROM payments WHERE payment_status = 'PAID' GROUP BY rental_id
+     ) p ON p.rental_id = r.rental_id
+     WHERE r.status IN ('BOOKED', 'ACTIVE', 'COMPLETED')`
+  );
+
+  res.json({ daily, monthly, byType, byBranch, pending: pending[0]?.pending_revenue || 0 });
+});
+
+module.exports = { dashboard, fleet, rentals, revenue };

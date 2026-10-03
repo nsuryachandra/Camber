@@ -12,8 +12,8 @@ async function seedUsers() {
     ('Priya Sharma', 'admin@fleetpro.in', ?, 'ADMIN', NULL),
     ('Rahul Verma', 'staff@camber.in', ?, 'STAFF', NULL),
     ('Rahul Verma', 'staff@fleetpro.in', ?, 'STAFF', NULL),
-    ('Aditya Verma', 'customer@camber.in', ?, 'CUSTOMER', 1),
-    ('Aditya Verma', 'customer@fleetpro.com', ?, 'CUSTOMER', 1)
+    ('N Suryachandra', 'customer@camber.in', ?, 'CUSTOMER', 1),
+    ('N Suryachandra', 'nsuryachandra16@gmail.com', ?, 'CUSTOMER', 1)
     ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash), full_name=VALUES(full_name), role=VALUES(role);
   `;
 
