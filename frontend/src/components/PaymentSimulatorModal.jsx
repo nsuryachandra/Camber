@@ -256,26 +256,26 @@ export default function PaymentSimulatorModal({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '14px 18px',
+                padding: '10px 16px',
                 background: '#09090b',
-                borderRadius: 12,
+                borderRadius: 10,
                 color: '#ffffff',
-                marginBottom: 16,
+                marginBottom: 12,
               }}
             >
               <div>
-                <div style={{ fontSize: 11, color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>
+                <div style={{ fontSize: 10.5, color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>
                   Payable Amount
                 </div>
-                <div style={{ fontSize: 28, fontWeight: 900, color: '#38bdf8', fontFamily: 'var(--font-display)' }}>
+                <div style={{ fontSize: 24, fontWeight: 900, color: '#38bdf8', fontFamily: 'var(--font-display)', lineHeight: 1.1 }}>
                   {formatCurrency(amount)}
                 </div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 11, color: '#a1a1aa', textTransform: 'uppercase', fontWeight: 700 }}>
+                <div style={{ fontSize: 10.5, color: '#a1a1aa', textTransform: 'uppercase', fontWeight: 700 }}>
                   Assigned Vehicle
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#f8fafc' }}>
+                <div style={{ fontSize: 12.5, fontWeight: 700, color: '#f8fafc' }}>
                   {vehicleInfo}
                 </div>
               </div>
@@ -286,17 +286,17 @@ export default function PaymentSimulatorModal({
               style={{
                 background: '#ffffff',
                 border: '1px solid #e2e8f0',
-                borderRadius: 14,
-                padding: '20px',
+                borderRadius: 12,
+                padding: '14px 16px',
                 textAlign: 'center',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                marginBottom: 16,
+                marginBottom: 14,
               }}
             >
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', marginBottom: 4 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', marginBottom: 2 }}>
                 Scan to Pay with Any UPI App
               </div>
-              <div style={{ fontSize: 11, color: '#64748b', marginBottom: 14 }}>
+              <div style={{ fontSize: 11, color: '#64748b', marginBottom: 10 }}>
                 UPI ID: <strong style={{ color: '#09090b', fontFamily: 'monospace' }}>628XXXXXXX@upi</strong> &bull; Amount pre-filled on scan
               </div>
 
@@ -304,11 +304,11 @@ export default function PaymentSimulatorModal({
               <div
                 style={{
                   display: 'inline-block',
-                  padding: 10,
+                  padding: 8,
                   background: '#ffffff',
                   border: '2px solid #0f172a',
-                  borderRadius: 12,
-                  boxShadow: '0 8px 24px rgba(15, 23, 42, 0.1)',
+                  borderRadius: 10,
+                  boxShadow: '0 6px 18px rgba(15, 23, 42, 0.08)',
                   position: 'relative',
                 }}
               >
@@ -316,27 +316,27 @@ export default function PaymentSimulatorModal({
                   <img
                     src={qrDataUrl}
                     alt="Scan UPI QR"
-                    style={{ width: 190, height: 190, display: 'block' }}
+                    style={{ width: 150, height: 150, display: 'block' }}
                   />
                 ) : (
-                  <div style={{ width: 190, height: 190, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: 150, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <RefreshCw size={24} className="spin" />
                   </div>
                 )}
               </div>
 
               {/* Accepted UPI Apps Strip */}
-              <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
                 {['Google Pay', 'PhonePe', 'Paytm', 'BHIM UPI'].map((appName) => (
                   <span
                     key={appName}
                     style={{
-                      fontSize: 11,
+                      fontSize: 10.5,
                       fontWeight: 600,
                       color: '#475569',
                       background: '#f8fafc',
                       border: '1px solid #e2e8f0',
-                      padding: '3px 9px',
+                      padding: '2px 8px',
                       borderRadius: 6,
                     }}
                   >

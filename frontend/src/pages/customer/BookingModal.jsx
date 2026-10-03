@@ -290,8 +290,7 @@ export default function BookingModal({ vehicle, isOpen, onClose, onBookingSucces
       ) : (
         <form onSubmit={handleConfirm}>
           {/* Vehicle Snapshot Header */}
-          {/* Full-Bleed Vehicle Showcase Banner */}
-          <div className="spec-modal-hero" style={{ height: 175, marginBottom: 18 }}>
+          <div className="spec-modal-hero">
             <img
               src={getVehicleImage(vehicle)}
               alt={`${vehicle.brand} ${vehicle.model}`}
