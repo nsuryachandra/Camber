@@ -2975,3 +2975,95 @@ table.dt .actions {
   letter-spacing: 0.05em;
   margin-top: 3px;
 }
+
+/* =========================================================================
+   Reservation Form & Summary Card Layout (Rentals.jsx & Admin Modals)
+   ========================================================================= */
+
+.rental-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .rental-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.summary-card {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0 0 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  font-size: 13px !important;
+}
+
+.summary-row:last-child {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+.summary-row .k {
+  color: var(--text-muted) !important;
+  font-weight: 600 !important;
+  font-size: 12.5px !important;
+}
+
+.summary-row .v {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  text-align: right !important;
+}
+
+.summary-row.total {
+  margin-top: 6px !important;
+  padding-top: 10px !important;
+  border-top: 2px dashed #cbd5e1 !important;
+  border-bottom: none !important;
+}
+
+.summary-row.total .k {
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+}
+
+.summary-row.total .v {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: #2563eb !important;
+  font-family: var(--font-display) !important;
+}
+
